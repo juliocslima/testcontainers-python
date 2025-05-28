@@ -1,6 +1,6 @@
 services:
   app:
-    image: fastapi-workshop:latest
+    image: pixelorange/fastapi-workshop:latest
     container_name: workshop-app
     build:
       context: .
