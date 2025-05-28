@@ -1,0 +1,22 @@
+###
+POST http://localhost:8000/stock
+Content-Type: application/json
+
+{
+  "product_id": 2,
+  "quantity": 25,
+  "category": "Food"
+}
+
+###
+GET http://localhost:8000/stock
+
+###
+PUT http://localhost:8000/stock/2
+Content-Type: application/json
+
+{
+  "product_id": 2,
+  "quantity": 30,
+  "category": "Food"
+}
