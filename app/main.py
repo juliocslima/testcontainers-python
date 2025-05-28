@@ -16,7 +16,7 @@ class StockResponse(Stock):
     id: int
 
 def get_redis():
-    redis_url = os.getenv("REDIS_URL", "redis://localhost:6379/0")
+    redis_url = os.getenv("REDIS_URL", "redis://redis:6379/0")
     return Redis.from_url(redis_url)
 
 @app.post("/stock/", response_model=StockResponse)
