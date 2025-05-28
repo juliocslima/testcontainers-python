@@ -12,6 +12,9 @@ Content-Type: application/json
 GET http://localhost:8000/stock
 
 ###
+GET http://localhost:8000/stock/9999
+
+###
 PUT http://localhost:8000/stock/2
 Content-Type: application/json
 

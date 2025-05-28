@@ -31,7 +31,7 @@ def create_product_stock(stock: Stock):
         "category": stock.category
     })
 
-    return {**stock.dict(), "id": stock_id}
+    return {**stock.model_dump(), "id": stock_id}
 
 @app.get("/stock/", response_model=List[StockResponse])
 def get_all_products_stocks():
@@ -50,8 +50,25 @@ def get_all_products_stocks():
 
     return stocks
 
+@app.get("/stock/{stock_id}", response_model=StockResponse)
+def get_stock_by_id(stock_id: int):
+    redis = get_redis()
+    stock_key = f"stock:{stock_id}"
+
+    if not redis.exists(stock_key):
+        raise HTTPException(status_code=404, detail="Stock information not found")
+
+    stock_data = redis.hgetall(stock_key)
+
+    return {
+        "id": stock_id,
+        "product_id": int(stock_data[b'product_id']),
+        "quantity": int(stock_data[b'quantity']),
+        "category": stock_data[b'category'].decode()
+    }
+
 @app.put("/stock/{stock_id}", response_model=dict)
-def update_expense(stock_id: int, stock: Stock):
+def update_stock(stock_id: int, stock: Stock):
     redis = get_redis()
     stock_key = f"stock:{stock_id}"
 
@@ -64,12 +81,12 @@ def update_expense(stock_id: int, stock: Stock):
         "category": stock.category
     })
 
-    return {**stock.dict(), "id": stock_id}
+    return {**stock.model_dump(), "id": stock_id}
 
 @app.delete("/stock/{stock_id}")
-def delete_expense(stock_id: int):
+def delete_stock(stock_id: int):
     redis = get_redis()
-    stock_key = f"expense:{stock_id}"
+    stock_key = f"stock:{stock_id}"
 
     if not redis.exists(stock_key):
         raise HTTPException(status_code=404, detail="Stock information not found")
